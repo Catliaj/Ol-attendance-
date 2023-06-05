@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Attendance Table</title>
+    <script>
+        // Function to save attendance data to local storage
+        function saveAttendance() {
+            var attendanceTable = document.getElementById("attendanceTable");
+            var attendanceData = {};
+            
+            for (var i = 0; i < attendanceTable.rows.length; i++) {
+                var row = attendanceTable.rows[i];
+                var studentName = row.cells[0].innerText;
+                var attendanceStatus = row.cells[1].querySelector("select").value;
+                attendanceData[studentName] = attendanceStatus;
+            }
+            
+            localStorage.setItem("attendanceData", JSON.stringify(attendanceData));
+        }
+        
+        // Function to load attendance data from local storage
+        function loadAttendance() {
+            var attendanceTable = document.getElementById("attendanceTable");
+            var attendanceData = JSON.parse(localStorage.getItem("attendanceData"));
+            
+            if (attendanceData) {
+                for (var i = 0; i < attendanceTable.rows.length; i++) {
+                    var row = attendanceTable.rows[i];
+                    var studentName = row.cells[0].innerText;
+                    var attendanceStatus = attendanceData[studentName];
+                    
+                    if (attendanceStatus) {
+                        row.cells[1].querySelector("select").value = attendanceStatus;
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body onload="loadAttendance()">
+    <table id="attendanceTable">
+        <tr>
+            <th>Student Name</th>
+            <th>Attendance Status</th>
+        </tr>
+        <tr>
+            <td>John Doe</td>
+            <td>
+                <select>
+                    <option value="Absent">Absent</option>
+                    <option value="Present">Present</option>
+                    <option value="Tardy">Tardy</option>
+                    <option value="No Class">No Class</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Jane Smith</td>
+            <td>
+                <select>
+                    <option value="Absent">Absent</option>
+                    <option value="Present">Present</option>
+                    <option value="Tardy">Tardy</option>
+                    <option value="No Class">No Class</option>
+                </select>
+            </td>
+        </tr>
+        <!-- Add more rows for other students -->
+    </table>
+    
+    <button onclick="saveAttendance()">Save Attendance</button>
+</body>
+</html>
